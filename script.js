@@ -7,10 +7,35 @@ function toggleTheme() {
 
 function appendValue(value) {
   display.value += value;
+  updatePreview(display.value);
 }
+
+function updatePreview(input) {
+  try {
+    let previewExp = input;
+
+    previewExp = previewExp.replace(/(\d+(?:\.\d+)?)\^(\d+(?:\.\d+)?)/g, 'Math.pow($1, $2)');
+    previewExp = previewExp.replace(/√\(([^)]+)\)/g, 'Math.sqrt($1)');
+    previewExp = previewExp.replace(/√(\d+(\.\d+)?)/g, 'Math.sqrt($1)');
+    previewExp = previewExp.replace(/sin\(([^)]+)\)/g, 'Math.sin($1 * Math.PI / 180)');
+    previewExp = previewExp.replace(/cos\(([^)]+)\)/g, 'Math.cos($1 * Math.PI / 180)');
+    previewExp = previewExp.replace(/tan\(([^)]+)\)/g, 'Math.tan($1 * Math.PI / 180)');
+    previewExp = previewExp.replace(/log\(([^)]+)\)/g, 'Math.log10($1)');
+    previewExp = previewExp.replace(/ln\(([^)]+)\)/g, 'Math.log($1)');
+    previewExp = previewExp.replace(/π/g, 'Math.PI');
+    previewExp = previewExp.replace(/\be\b/g, 'Math.E');
+
+    const previewResult = eval(previewExp);
+    document.getElementById("preview").innerText = "= " + previewResult.toFixed(4);
+  } catch {
+    document.getElementById("preview").innerText = "";
+  }
+}
+
 
 function clearDisplay() {
   display.value = '';
+  updatePreview('');
 }
 
 function deleteLast() {
@@ -21,28 +46,37 @@ function calculate() {
   try {
     let expression = display.value;
 
-    // Handle power operator: x^y → Math.pow(x, y)
+    // Replace ^ with Math.pow
     expression = expression.replace(/(\d+(?:\.\d+)?)\^(\d+(?:\.\d+)?)/g, 'Math.pow($1, $2)');
 
-    // Handle square roots:
-    // √(9+7) → Math.sqrt(9+7)
+    // √(expression)
     expression = expression.replace(/√\(([^)]+)\)/g, 'Math.sqrt($1)');
-
-    // √9 → Math.sqrt(9)
     expression = expression.replace(/√(\d+(\.\d+)?)/g, 'Math.sqrt($1)');
 
-    // sin(30) → Math.sin(...), convert to radians
+    // Trig functions (in degrees)
     expression = expression.replace(/sin\(([^)]+)\)/g, 'Math.sin($1 * Math.PI / 180)');
     expression = expression.replace(/cos\(([^)]+)\)/g, 'Math.cos($1 * Math.PI / 180)');
     expression = expression.replace(/tan\(([^)]+)\)/g, 'Math.tan($1 * Math.PI / 180)');
 
+    // Logarithmic functions
+    expression = expression.replace(/log\(([^)]+)\)/g, 'Math.log10($1)');
+    expression = expression.replace(/ln\(([^)]+)\)/g, 'Math.log($1)');
+
+    // π and e constants
+    expression = expression.replace(/π/g, 'Math.PI');
+    expression = expression.replace(/\be\b/g, 'Math.E');
+
     const result = eval(expression);
-    display.value = result;
-    addToHistory(expression + ' = ' + result);
+
+    // Format result to 4 decimal places (optional: change to 2 or 6 if you want)
+    display.value = parseFloat(result.toFixed(4));
+
+    addToHistory(display.value);
   } catch (error) {
     display.value = 'Error';
   }
 }
+
 
 
 function addToHistory(entry) {

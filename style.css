@@ -104,6 +104,15 @@ body {
   gap: 10px;
 }
 
+.preview {
+  height: 20px;
+  color: #888;
+  font-size: 0.9em;
+  text-align: right;
+  padding: 4px 8px;
+  font-family: monospace;
+}
+
 button {
   padding: 15px;
   font-size: 1.2em;
@@ -145,3 +154,4 @@ button:hover {
   margin-bottom: 5px;
   color: #ccc;
 }
+

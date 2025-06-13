@@ -12,23 +12,27 @@
 </div>
 
   <div class="calculator">
-    <input type="text" id="display" readonly placeholder="0" />
-
+    <div id="preview" class="preview"></div>
+    <input type="text" id="display" readonly>
+    
     <div class="buttons">
       <button onclick="clearDisplay()">C</button>
       <button onclick="deleteLast()">⌫</button>
       <button onclick="appendValue('%')">%</button>
       <button onclick="appendValue('/')">/</button>
 
+
       <button onclick="appendValue('7')">7</button>
       <button onclick="appendValue('8')">8</button>
       <button onclick="appendValue('9')">9</button>
       <button onclick="appendValue('*')">*</button>
 
+
       <button onclick="appendValue('4')">4</button>
       <button onclick="appendValue('5')">5</button>
       <button onclick="appendValue('6')">6</button>
       <button onclick="appendValue('-')">-</button>
+
 
       <button onclick="appendValue('1')">1</button>
       <button onclick="appendValue('2')">2</button>
@@ -47,10 +51,13 @@
       <button onclick="appendValue('√(')">√(</button>
  
 
-      <button onclick="appendValue('Math.log10(')">log</button>
-      <button onclick="appendValue('Math.PI')">π</button>
-      <button onclick="appendValue('Math.E')">e</button>
+      <button onclick="appendValue('log(')">log</button>
+      <button onclick="appendValue('ln(')">ln</button>
+      <button onclick="appendValue('π')">π</button>
+      <button onclick="appendValue('e')">e</button>
       <button onclick="appendValue(')')">)</button>
+      <button onclick="appendValue('(')">(</button>
+
     </div>
 
     <div class="history">
