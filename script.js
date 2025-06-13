@@ -19,13 +19,31 @@ function deleteLast() {
 
 function calculate() {
   try {
-    const result = eval(display.value);
-    addToHistory(display.value + " = " + result);
+    let expression = display.value;
+
+    // Handle power operator: x^y → Math.pow(x, y)
+    expression = expression.replace(/(\d+(?:\.\d+)?)\^(\d+(?:\.\d+)?)/g, 'Math.pow($1, $2)');
+
+    // Handle square roots:
+    // √(9+7) → Math.sqrt(9+7)
+    expression = expression.replace(/√\(([^)]+)\)/g, 'Math.sqrt($1)');
+
+    // √9 → Math.sqrt(9)
+    expression = expression.replace(/√(\d+(\.\d+)?)/g, 'Math.sqrt($1)');
+
+    // sin(30) → Math.sin(...), convert to radians
+    expression = expression.replace(/sin\(([^)]+)\)/g, 'Math.sin($1 * Math.PI / 180)');
+    expression = expression.replace(/cos\(([^)]+)\)/g, 'Math.cos($1 * Math.PI / 180)');
+    expression = expression.replace(/tan\(([^)]+)\)/g, 'Math.tan($1 * Math.PI / 180)');
+
+    const result = eval(expression);
     display.value = result;
-  } catch {
+    addToHistory(expression + ' = ' + result);
+  } catch (error) {
     display.value = 'Error';
   }
 }
+
 
 function addToHistory(entry) {
   const li = document.createElement('li');
